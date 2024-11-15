@@ -10,80 +10,130 @@ import {
   ResetPassword
 } from '@pages';
 import '../../index.css';
-import styles from './app.module.css';
 
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from '../protected-route/ProtectedRoute';
+import { IngredientDetails, Modal, OrderInfo } from '@components';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import { Layout } from '../layout/layout';
+import { useState } from 'react';
 
-const App = () => (
-  <div className={styles.app}>
-    <AppHeader />
-    <Routes>
-      <Route path='/' element={<ConstructorPage />} />
-      <Route path='/feed' element={<Feed />} />
-      <Route path='/login' element={<ProtectedRoute accessRoles={[]} />}>
-        <Route path='/login' element={<Login />} />
-      </Route>
-      <Route path='/register' element={<ProtectedRoute accessRoles={[]} />}>
-        <Route path='/register' element={<Register />} />
-      </Route>
-      <Route
-        path='/forgot-password'
-        element={<ProtectedRoute accessRoles={[]} />}
-      >
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-      </Route>
-      <Route
-        path='/reset-password'
-        element={<ProtectedRoute accessRoles={[]} />}
-      >
-        <Route path='/reset-password' element={<ResetPassword />} />
-      </Route>
-      <Route path='/profile' element={<ProtectedRoute accessRoles={[]} />}>
-        <Route path='/profile' element={<Profile />} />
-      </Route>
-      <Route
-        path='/profile/orders'
-        element={<ProtectedRoute accessRoles={[]} />}
-      >
-        <Route path='/profile/orders' element={<ProfileOrders />} />
-      </Route>
-      <Route path='*' element={<NotFound404 />} />
-      {/* <Route
-        path='/feed/:number'
-        element={
-          <Modal
-            title={''}
-            onClose={() => {
-              console.log('close modal');
-            }}
+const App = () => {
+  const location = useLocation();
+  const background = location.state?.background;
+  const navigate = useNavigate();
+
+  return (
+    <Routes location={background || location}>
+      <Route path='/' element={<Layout />}>
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute isAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute isAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute isAuth>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute isAuth>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='/profile'>
+          <Route
+            index
+            element={
+              <ProtectedRoute isAuth>
+                <Profile />
+              </ProtectedRoute>
+            }
           />
-        }
-      >
-        <OrderInfo />
-      </Route> */}
-      {/* <Route
-        path='/ingredients/:id'
-        element={
-          <Modal
-            title={''}
-            onClose={() => {
-              console.log('close modal');
-            }}
+          <Route
+            path='orders'
+            element={
+              <ProtectedRoute isAuth>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
           />
-        }
-      >
-        <IngredientDetails />
-      </Route> */}
-      <Route
-        path='/profile/orders/:number'
-        element={<ProtectedRoute accessRoles={[]} />}
-      >
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+          <Route
+            path='orders/:number'
+            element={
+              <ProtectedRoute isAuth>
+                <OrderInfo />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path='*' element={<NotFound404 />} />
+        <Route
+          path='/feed/:number'
+          element={
+            <Modal
+              title={'OrderInfo'}
+              onClose={() => {
+                navigate('/feed', { replace: true });
+              }}
+            >
+              <OrderInfo />
+            </Modal>
+          }
+        />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <Modal
+              title={'IngredientDetails'}
+              onClose={() => navigate('/ingredients')}
+            >
+              <IngredientDetails />
+            </Modal>
+          }
+        />
+        {background && (
+          <Routes>
+            <Route
+              path='/profile/orders/:number'
+              element={
+                <Modal
+                  title={'MyOrderInfo'}
+                  onClose={() => navigate('/profile/orders')}
+                >
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
       </Route>
     </Routes>
-  </div>
-);
+  );
+};
 
 export default App;
