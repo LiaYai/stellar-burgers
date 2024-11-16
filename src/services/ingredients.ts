@@ -19,13 +19,13 @@ export const getIngredients = createAsyncThunk('ingredients/getAll', async () =>
 );
 
 export const ingredientsSlice = createSlice({
-  name: 'ingredients/getAll',
+  name: 'ingredients',
   initialState,
   reducers: {},
   selectors: {
-    getAllIngredients: (state) => state.ingredients,
-    getLoading: (state) => state.loading,
-    getError: (state) => state.error
+    selectIngredients: (state) => state.ingredients,
+    selectLoading: (state) => state.loading,
+    selectError: (state) => state.error
   },
   extraReducers: (builder) => {
     builder
@@ -44,6 +44,6 @@ export const ingredientsSlice = createSlice({
   }
 });
 
-export const { getAllIngredients, getLoading, getError } =
+export const { selectIngredients, selectLoading, selectError } =
   ingredientsSlice.selectors;
 //export const { ingredientsReducer } = ingredientsSlice;

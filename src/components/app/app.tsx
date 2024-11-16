@@ -12,13 +12,7 @@ import {
 import '../../index.css';
 
 import { IngredientDetails, Modal, OrderInfo } from '@components';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { Layout } from '../layout/layout';
 import { useDispatch } from '../../services/store';
@@ -35,7 +29,7 @@ const App = () => {
     <>
       <Routes location={background || location}>
         <Route path='/' element={<Layout />}>
-          <Route path='/' element={<ConstructorPage />} />
+          <Route index element={<ConstructorPage />} />
           <Route path='/feed' element={<Feed />} />
           <Route
             path='/login'
@@ -109,17 +103,6 @@ const App = () => {
               </Modal>
             }
           />
-          <Route
-            path='/ingredients/:id'
-            element={
-              <Modal
-                title={'IngredientDetails'}
-                onClose={() => navigate('/ingredients')}
-              >
-                <IngredientDetails />
-              </Modal>
-            }
-          />
         </Route>
       </Routes>
       {background && (
@@ -132,6 +115,14 @@ const App = () => {
                 onClose={() => navigate('/profile/orders')}
               >
                 <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title={'Детали ингредиента'} onClose={() => navigate('/')}>
+                <IngredientDetails />
               </Modal>
             }
           />
