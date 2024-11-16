@@ -9,9 +9,6 @@ export const ProfileMenu: FC = () => {
 
   const handleLogout = () => {
     navigate('/', { replace: true });
-    localStorage.clear();
-    localStorage.removeItem('token');
-    // deleteCookie('token');
   };
 
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;

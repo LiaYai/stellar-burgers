@@ -15,24 +15,30 @@ import { IngredientDetails, Modal, OrderInfo } from '@components';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { Layout } from '../layout/layout';
-import { useDispatch } from '../../services/store';
+import AppRoutes from '../../utils/constants';
+import { AppDispatch } from '../../services/store';
+import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useMemo } from 'react';
 import { getIngredients } from '../../services/ingredients';
 
 const App = () => {
   const location = useLocation();
   const background = location.state?.background;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  dispatch(getIngredients());
+  const dispatch: AppDispatch = useDispatch();
+
+  useMemo(() => {
+    dispatch(getIngredients());
+  }, []);
 
   return (
     <>
       <Routes location={background || location}>
-        <Route path='/' element={<Layout />}>
+        <Route path={AppRoutes.ROOT} element={<Layout />}>
           <Route index element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
+          <Route path={AppRoutes.FEED} element={<Feed />} />
           <Route
-            path='/login'
+            path={AppRoutes.LOGIN}
             element={
               <ProtectedRoute isAuth>
                 <Login />
@@ -40,7 +46,7 @@ const App = () => {
             }
           />
           <Route
-            path='/register'
+            path={AppRoutes.REGISTER}
             element={
               <ProtectedRoute isAuth>
                 <Register />
@@ -48,7 +54,7 @@ const App = () => {
             }
           />
           <Route
-            path='/forgot-password'
+            path={AppRoutes.FORGOT_PASSWORD}
             element={
               <ProtectedRoute isAuth>
                 <ForgotPassword />
@@ -56,73 +62,72 @@ const App = () => {
             }
           />
           <Route
-            path='/reset-password'
+            path={AppRoutes.RESET_PASSWORD}
             element={
               <ProtectedRoute isAuth>
                 <ResetPassword />
               </ProtectedRoute>
             }
           />
-          <Route path='/profile'>
-            <Route
-              index
-              element={
-                <ProtectedRoute isAuth>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='orders'
-              element={
-                <ProtectedRoute isAuth>
-                  <ProfileOrders />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='orders/:number'
-              element={
-                <ProtectedRoute isAuth>
-                  <OrderInfo />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-          <Route path='*' element={<NotFound404 />} />
           <Route
-            path='/feed/:number'
+            path={AppRoutes.PROFILE}
             element={
+              <ProtectedRoute isAuth>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={AppRoutes.ORDERS}
+            element={
+              <ProtectedRoute isAuth>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
+          />
+          <Route path={AppRoutes.NOT_FOUND} element={<NotFound404 />} />
+        </Route>
+        <Route
+          path={AppRoutes.ORDER_INFO}
+          element={
+            <ProtectedRoute>
               <Modal
-                title={'OrderInfo'}
-                onClose={() => {
-                  navigate('/feed', { replace: true });
-                }}
+                title={'идентификатор заказа'}
+                onClose={() =>
+                  navigate({
+                    pathname: AppRoutes.ORDERS
+                  })
+                }
               >
                 <OrderInfo />
               </Modal>
-            }
-          />
-        </Route>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       {background && (
         <Routes>
           <Route
-            path='/profile/orders/:number'
+            path={AppRoutes.INGREDIENTS}
             element={
               <Modal
-                title={'MyOrderInfo'}
-                onClose={() => navigate('/profile/orders')}
+                title={'Детали ингредиента'}
+                onClose={() => navigate({ pathname: AppRoutes.ROOT })}
               >
-                <OrderInfo />
+                <IngredientDetails />
               </Modal>
             }
           />
           <Route
-            path='/ingredients/:id'
+            path={AppRoutes.FEED_INFO}
             element={
-              <Modal title={'Детали ингредиента'} onClose={() => navigate('/')}>
-                <IngredientDetails />
+              <Modal
+                title={'идентификатор заказа'}
+                onClose={() => {
+                  navigate({ pathname: AppRoutes.FEED });
+                }}
+              >
+                <OrderInfo />
               </Modal>
             }
           />

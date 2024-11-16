@@ -9,11 +9,12 @@ import styles from './order-card.module.css';
 
 import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
+import AppRoutes from '../../../utils/constants';
 
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (
     <Link
-      to={orderInfo.number.toString()}
+      to={`${AppRoutes.FEED}/${orderInfo.number.toString()}`}
       relative='path'
       state={locationState}
       className={`p-6 mb-4 mr-2 ${styles.order}`}
