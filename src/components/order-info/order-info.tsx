@@ -2,25 +2,19 @@ import { FC, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredients } from '../../services/ingredients';
 import { useParams } from 'react-router-dom';
-import { selectAllOrders } from '../../services/feeds';
+import { AppDispatch } from '../../services/store';
+import { getOrderByNumber, selectOrder } from '../../services/feeds';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const { id } = useParams();
-  const orders = useSelector(selectAllOrders);
-  const orderData = orders.find((item) => item._id === id);
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
+
+  const dispatch: AppDispatch = useDispatch();
+  useMemo(() => dispatch(getOrderByNumber(Number(id))), [id]);
+  const orderData = useSelector(selectOrder);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients);
 
