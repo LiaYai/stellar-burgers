@@ -6,7 +6,6 @@ import {
   nanoid,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { selectOrder } from './feeds';
 
 export const sendNewOrder = createAsyncThunk(
   'newOrder',
@@ -46,6 +45,23 @@ export const newOrderSlice = createSlice({
         return { payload: { ...data, id } };
       }
     },
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ from: number; to: number }>
+    ) => {
+      const { from, to } = action.payload;
+      state.constructorItems.ingredients.splice(
+        to,
+        0,
+        state.constructorItems.ingredients.splice(from, 1)[0]
+      );
+    },
+    removeIngredient: (state, action: PayloadAction<string>) => {
+      state.constructorItems.ingredients =
+        state.constructorItems.ingredients.filter(
+          (item) => item.id !== action.payload
+        );
+    },
     resetOrder: () => initialState
   },
   selectors: {
@@ -68,7 +84,8 @@ export const newOrderSlice = createSlice({
   }
 });
 
-export const { addIngredient, resetOrder } = newOrderSlice.actions;
+export const { addIngredient, resetOrder, removeIngredient, moveIngredient } =
+  newOrderSlice.actions;
 export const {
   selectOrderIngredients,
   selectOrderRequest,

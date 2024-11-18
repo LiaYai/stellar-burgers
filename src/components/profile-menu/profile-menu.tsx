@@ -1,14 +1,15 @@
 import { FC } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProfileMenuUI } from '@ui';
 import { deleteCookie } from 'src/utils/cookie';
+import AppRoutes from '../../utils/constants';
 
 export const ProfileMenu: FC = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate('/', { replace: true });
+    navigate(AppRoutes.LOGIN);
   };
 
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;

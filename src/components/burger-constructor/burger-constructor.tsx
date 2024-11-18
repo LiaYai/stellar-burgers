@@ -8,7 +8,7 @@ import {
   selectOrderRequest,
   resetOrder,
   sendNewOrder
-} from '../../services/newOrder';
+} from '../../services/burger';
 import { AppDispatch } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
@@ -23,14 +23,14 @@ export const BurgerConstructor: FC = () => {
       (constructorItems.bun
         ? [...constructorItems.ingredients, constructorItems.bun]
         : constructorItems.ingredients
-      ).map((item) => item.name),
+      ).map((item) => item._id),
     [constructorItems]
   );
-  const onOrderClick = () => {
+  const onOrderClick = useCallback(() => {
     if (!constructorItems.bun || orderRequest) return;
 
     dispatch(sendNewOrder(orderIngredients));
-  };
+  }, [constructorItems, orderRequest, orderIngredients]);
   const closeOrderModal = useCallback(() => dispatch(resetOrder()), []);
 
   const price = useMemo(

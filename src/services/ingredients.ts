@@ -36,7 +36,7 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? 'Error';
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.loading = false;

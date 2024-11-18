@@ -55,7 +55,7 @@ const App = () => {
           <Route
             path={AppRoutes.LOGIN}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute onlyUnAuth>
                 <Login />
               </ProtectedRoute>
             }
@@ -63,7 +63,7 @@ const App = () => {
           <Route
             path={AppRoutes.REGISTER}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute onlyUnAuth>
                 <Register />
               </ProtectedRoute>
             }
@@ -71,7 +71,7 @@ const App = () => {
           <Route
             path={AppRoutes.FORGOT_PASSWORD}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute onlyUnAuth>
                 <ForgotPassword />
               </ProtectedRoute>
             }
@@ -79,7 +79,7 @@ const App = () => {
           <Route
             path={AppRoutes.RESET_PASSWORD}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute>
                 <ResetPassword />
               </ProtectedRoute>
             }
@@ -87,7 +87,7 @@ const App = () => {
           <Route
             path={AppRoutes.PROFILE}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
@@ -95,25 +95,12 @@ const App = () => {
           <Route
             path={AppRoutes.ORDERS}
             element={
-              <ProtectedRoute isAuth>
+              <ProtectedRoute>
                 <ProfileOrders />
               </ProtectedRoute>
             }
           />
           <Route path={AppRoutes.NOT_FOUND} element={<NotFound404 />} />
-          <Route
-            path={AppRoutes.ORDER_INFO}
-            element={
-              <ProtectedRoute>
-                <Modal
-                  title={'byjk'}
-                  onClose={() => navigate(AppRoutes.PROFILE)}
-                >
-                  <OrderInfo />
-                </Modal>
-              </ProtectedRoute>
-            }
-          />
         </Route>
       </Routes>
       {background && (
@@ -130,7 +117,7 @@ const App = () => {
             }
           />
           <Route
-            path={'/feed/:id'}
+            path={AppRoutes.FEED_INFO}
             element={
               <Modal
                 title={`#${location.pathname.split('/')[2]}`}
@@ -138,6 +125,19 @@ const App = () => {
               >
                 <OrderInfo />
               </Modal>
+            }
+          />
+          <Route
+            path={AppRoutes.ORDER_INFO}
+            element={
+              <ProtectedRoute>
+                <Modal
+                  title={`#${location.pathname.split('/')[3]}`}
+                  onClose={() => navigate(AppRoutes.PROFILE)}
+                >
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>

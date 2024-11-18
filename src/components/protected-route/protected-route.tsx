@@ -1,23 +1,33 @@
 import { TUser } from '@utils-types';
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import AppRoutes from '../../utils/constants';
+import { Preloader } from '@ui';
+import { useSelector } from 'react-redux';
+import { selectIsLoading, selectUser } from '../../services/user';
 
 type ProtectedRouteProps = {
-  isAuth?: boolean;
+  onlyUnAuth?: boolean;
   children: React.ReactNode;
 };
 
-export function ProtectedRoute({ children, isAuth }: ProtectedRouteProps) {
-  // const { user, isInit, isLoading } = useSelector((store: RootState) => store.user);
+export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
+  const location = useLocation();
+  const user = useSelector(selectUser);
 
-  // if (!isInit || isLoading) {
-  //     return <div>Загрузка...</div>
-  // }
-  // if (!user || !accessRoles.includes(user.role)) {
-  //     return <Navigate to="/login" />;
-  // }
-  if (!isAuth) {
-    return <Navigate to='/login' />;
+  const isInit = false;
+  const isLoading = useSelector(selectIsLoading);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (!onlyUnAuth && !user) {
+    return <Navigate to={AppRoutes.LOGIN} />;
+  }
+
+  if (onlyUnAuth && user) {
+    return <Navigate to={AppRoutes.PROFILE} />;
   }
 
   return children;

@@ -4,10 +4,12 @@ import { getOrdersApi } from '@api';
 
 type TOrdersState = {
   orders: TOrder[];
+  isLoading: boolean;
 };
 
 const initialState: TOrdersState = {
-  orders: []
+  orders: [],
+  isLoading: false
 };
 
 export const getOrders = createAsyncThunk(
@@ -20,14 +22,24 @@ export const ordersSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectUserOrders: (state) => state.orders
+    selectUserOrders: (state) => state.orders,
+    selectIsOrdersLoading: (state) => state.isLoading
   },
   extraReducers: (builder) => {
-    builder.addCase(getOrders.fulfilled, (state, action) => {
-      state.orders = action.payload;
-    });
+    builder
+      .addCase(getOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrders.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload;
+      });
   }
 });
 
-export const { selectUserOrders } = ordersSlice.selectors;
+export const { selectUserOrders, selectIsOrdersLoading } =
+  ordersSlice.selectors;
 export default ordersSlice.reducer;
