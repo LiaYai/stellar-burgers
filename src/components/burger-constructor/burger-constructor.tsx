@@ -1,36 +1,47 @@
 import { FC, useCallback, useMemo } from 'react';
-import { TConstructorIngredient } from '@utils-types';
+import { TConstructorIngredient, TBurger } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import {
-  selectOrderIngredients,
-  selectOrderModalData,
-  selectOrderRequest,
+  getOrderIngredients,
+  getOrderModalData,
+  getOrderRequest,
   resetOrder,
-  sendNewOrder
+  postOrder
 } from '../../services/burger';
-import { AppDispatch } from '../../services/store';
+import { getUserData, getUserIsAuth } from '../../services/user';
+import AppRoutes from '../../utils/constants';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Modal } from '../modal';
+
+const flatIngredients = (ingredients: TBurger) =>
+  (ingredients.bun
+    ? [...ingredients.ingredients, ingredients.bun]
+    : ingredients.ingredients
+  ).map((item) => item._id);
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems = useSelector(selectOrderIngredients);
-  const orderRequest = useSelector(selectOrderRequest);
-  const orderModalData = useSelector(selectOrderModalData);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const constructorItems = useSelector(getOrderIngredients);
+  const orderRequest = useSelector(getOrderRequest);
+  const orderModalData = useSelector(getOrderModalData);
+  const user = useSelector(getUserData);
 
   const orderIngredients = useMemo(
-    () =>
-      (constructorItems.bun
-        ? [...constructorItems.ingredients, constructorItems.bun]
-        : constructorItems.ingredients
-      ).map((item) => item._id),
+    () => flatIngredients(constructorItems),
     [constructorItems]
   );
   const onOrderClick = useCallback(() => {
     if (!constructorItems.bun || orderRequest) return;
+    if (!user) {
+      return navigate(AppRoutes.LOGIN);
+    }
 
-    dispatch(sendNewOrder(orderIngredients));
+    dispatch(postOrder(orderIngredients));
   }, [constructorItems, orderRequest, orderIngredients]);
+
   const closeOrderModal = useCallback(() => dispatch(resetOrder()), []);
 
   const price = useMemo(

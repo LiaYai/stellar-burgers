@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { AppDispatch } from 'src/services/store';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,9 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ email, password, name: userName }));
+    dispatch(registerUser({ email, password, name: userName }))
+      .unwrap()
+      .catch((error) => alert(`Ошибка регистрации: ${error.message}`));
   };
 
   return (

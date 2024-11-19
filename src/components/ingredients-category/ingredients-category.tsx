@@ -3,14 +3,14 @@ import { TIngredientsCategoryProps } from './type';
 import { TIngredient } from '@utils-types';
 import { IngredientsCategoryUI } from '../ui/ingredients-category';
 import { useSelector } from 'react-redux';
-import { selectOrderIngredients } from '../../services/burger';
+import { getOrderIngredients } from '../../services/burger';
 
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
 >(({ title, titleRef, ingredients }, ref) => {
   /** TODO: взять переменную из стора */
-  const burgerConstructor = useSelector(selectOrderIngredients);
+  const burgerConstructor = useSelector(getOrderIngredients);
 
   const ingredientsCounters = useMemo(() => {
     const { bun, ingredients } = burgerConstructor;

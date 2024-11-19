@@ -1,5 +1,10 @@
-import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-import { TNewOrderResponse, orderBurgerApi } from '@api';
+import {
+  TConstructorIngredient,
+  TIngredient,
+  TOrder,
+  TBurger
+} from '@utils-types';
+import { orderBurgerApi } from '@api';
 import {
   createAsyncThunk,
   createSlice,
@@ -7,28 +12,25 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit';
 
-export const sendNewOrder = createAsyncThunk(
-  'newOrder',
-  async (data: string[]) => await orderBurgerApi(data)
-);
-
-type TOrderState = {
-  constructorItems: {
-    bun: TConstructorIngredient | null;
-    ingredients: TConstructorIngredient[];
-  };
+export type TOrderState = {
+  burgerIngredients: TBurger;
   orderRequest: boolean;
   orderModalData: TOrder | null;
 };
 
 const initialState: TOrderState = {
-  constructorItems: {
+  burgerIngredients: {
     bun: null,
     ingredients: []
   },
   orderRequest: false,
   orderModalData: null
 };
+
+export const postOrder = createAsyncThunk(
+  'newOrder',
+  async (data: string[]) => await orderBurgerApi(data)
+);
 
 export const newOrderSlice = createSlice({
   name: 'newOrder',
@@ -37,8 +39,8 @@ export const newOrderSlice = createSlice({
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         action.payload.type === 'bun'
-          ? (state.constructorItems.bun = action.payload)
-          : state.constructorItems.ingredients.push(action.payload);
+          ? (state.burgerIngredients.bun = action.payload)
+          : state.burgerIngredients.ingredients.push(action.payload);
       },
       prepare: (data: TIngredient) => {
         const id = nanoid();
@@ -50,35 +52,35 @@ export const newOrderSlice = createSlice({
       action: PayloadAction<{ from: number; to: number }>
     ) => {
       const { from, to } = action.payload;
-      state.constructorItems.ingredients.splice(
+      state.burgerIngredients.ingredients.splice(
         to,
         0,
-        state.constructorItems.ingredients.splice(from, 1)[0]
+        state.burgerIngredients.ingredients.splice(from, 1)[0]
       );
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
-      state.constructorItems.ingredients =
-        state.constructorItems.ingredients.filter(
+      state.burgerIngredients.ingredients =
+        state.burgerIngredients.ingredients.filter(
           (item) => item.id !== action.payload
         );
     },
     resetOrder: () => initialState
   },
   selectors: {
-    selectOrderIngredients: (state: TOrderState) => state.constructorItems,
-    selectOrderRequest: (state: TOrderState) => state.orderRequest,
-    selectOrderModalData: (state: TOrderState) => state.orderModalData
+    getOrderIngredients: (state) => state.burgerIngredients,
+    getOrderRequest: (state) => state.orderRequest,
+    getOrderModalData: (state) => state.orderModalData
   },
   extraReducers: (builder) => {
     builder
-      .addCase(sendNewOrder.pending, (state) => {
+      .addCase(postOrder.pending, (state) => {
         state.orderRequest = true;
       })
-      .addCase(sendNewOrder.fulfilled, (state, action) => {
+      .addCase(postOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
       })
-      .addCase(sendNewOrder.rejected, (state) => {
+      .addCase(postOrder.rejected, (state) => {
         state.orderRequest = false;
       });
   }
@@ -86,9 +88,6 @@ export const newOrderSlice = createSlice({
 
 export const { addIngredient, resetOrder, removeIngredient, moveIngredient } =
   newOrderSlice.actions;
-export const {
-  selectOrderIngredients,
-  selectOrderRequest,
-  selectOrderModalData
-} = newOrderSlice.selectors;
+export const { getOrderIngredients, getOrderRequest, getOrderModalData } =
+  newOrderSlice.selectors;
 export default newOrderSlice.reducer;

@@ -8,7 +8,7 @@ enum AppRoutes {
   PROFILE = '/profile',
   ORDERS = '/profile/orders',
   NOT_FOUND = '*',
-  ORDER_INFO = '/profile/orders/:number',
+  ORDER_INFO = '/profile/orders/:id',
   INGREDIENTS = '/ingredients/:id',
   FEED_INFO = '/feed/:id'
 }

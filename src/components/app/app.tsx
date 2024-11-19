@@ -22,27 +22,29 @@ import {
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { Layout } from '../layout/layout';
 import AppRoutes from '../../utils/constants';
-import { AppDispatch } from '../../services/store';
-import { useDispatch } from 'react-redux';
-import { useCallback, useMemo } from 'react';
+import { useDispatch } from '../../services/store';
+import { useCallback, useEffect, useMemo } from 'react';
 import { getIngredients } from '../../services/ingredients';
 import { clearSelectedOrder } from '../../services/feeds';
+import { getUserAuth } from '../../services/user';
 
 const App = () => {
   const location = useLocation();
   const background = location.state?.background;
   const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
-  useMemo(() => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
     dispatch(getIngredients());
-  }, []);
+    dispatch(getUserAuth());
+  }, [dispatch]);
 
   const clearSelected = useCallback(() => {
     dispatch(clearSelectedOrder());
-  }, []);
+  }, [dispatch]);
 
   const closeModalOrder = () => {
-    navigate(background?.pathname || AppRoutes.ROOT);
+    navigate(background.pathname);
     clearSelected();
   };
 
@@ -100,6 +102,16 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path={AppRoutes.INGREDIENTS} element={<IngredientDetails />} />
+          <Route path={AppRoutes.FEED_INFO} element={<OrderInfo />} />
+          <Route
+            path={AppRoutes.ORDER_INFO}
+            element={
+              <ProtectedRoute>
+                <OrderInfo />
+              </ProtectedRoute>
+            }
+          />
           <Route path={AppRoutes.NOT_FOUND} element={<NotFound404 />} />
         </Route>
       </Routes>
@@ -110,7 +122,7 @@ const App = () => {
             element={
               <Modal
                 title={'Детали ингредиента'}
-                onClose={() => navigate(background)}
+                onClose={() => navigate(background.pathname)}
               >
                 <IngredientDetails />
               </Modal>
@@ -120,7 +132,7 @@ const App = () => {
             path={AppRoutes.FEED_INFO}
             element={
               <Modal
-                title={`#${location.pathname.split('/')[2]}`}
+                title={`#${location.pathname.split('/').slice(2)}`}
                 onClose={closeModalOrder}
               >
                 <OrderInfo />
@@ -132,8 +144,8 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Modal
-                  title={`#${location.pathname.split('/')[3]}`}
-                  onClose={() => navigate(AppRoutes.PROFILE)}
+                  title={`#${location.pathname.split('/').slice(3)}`}
+                  onClose={closeModalOrder}
                 >
                   <OrderInfo />
                 </Modal>

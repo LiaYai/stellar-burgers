@@ -1,16 +1,19 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ProfileMenuUI } from '@ui';
-import { deleteCookie } from 'src/utils/cookie';
 import AppRoutes from '../../utils/constants';
+import { useDispatch } from '../../services/store';
+import { logoutUser } from '../../services/user';
 
 export const ProfileMenu: FC = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    navigate(AppRoutes.LOGIN);
-  };
+  const logout: () => void = useCallback(() => {
+    dispatch(logoutUser());
+    //navigate(AppRoutes.LOGIN);
+  }, [dispatch]);
 
-  return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;
+  return <ProfileMenuUI handleLogout={logout} pathname={pathname} />;
 };

@@ -1,5 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi, getOrderByNumberApi } from '../utils/burger-api';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  TFeedsResponse,
+  TOrderResponse
+} from '../utils/burger-api';
 import { TOrder } from '@utils-types';
 
 type TFeedsState = {
@@ -35,25 +40,31 @@ export const feedsSlice = createSlice({
     }
   },
   selectors: {
-    selectAllOrders: (state) => state.orders,
-    selectTotal: (state) => state.total,
-    selectTotalToday: (state) => state.totalToday,
-    selectOrder: (state) => state.selectedOrder
+    getAllOrders: (state) => state.orders,
+    getTotal: (state) => state.total,
+    getTotalToday: (state) => state.totalToday,
+    getSelectedOrder: (state) => state.selectedOrder
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFeeds.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.total = action.payload.total;
-        state.totalToday = action.payload.totalToday;
-      })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.selectedOrder = action.payload.orders[0];
-      });
+      .addCase(
+        getFeeds.fulfilled,
+        (state, action: PayloadAction<TFeedsResponse>) => {
+          state.orders = action.payload.orders;
+          state.total = action.payload.total;
+          state.totalToday = action.payload.totalToday;
+        }
+      )
+      .addCase(
+        getOrderByNumber.fulfilled,
+        (state, action: PayloadAction<TOrderResponse>) => {
+          state.selectedOrder = action.payload.orders[0];
+        }
+      );
   }
 });
 
-export const { selectAllOrders, selectTotal, selectTotalToday, selectOrder } =
+export const { getAllOrders, getTotal, getTotalToday, getSelectedOrder } =
   feedsSlice.selectors;
 export const { clearSelectedOrder } = feedsSlice.actions;
 export default feedsSlice.reducer;

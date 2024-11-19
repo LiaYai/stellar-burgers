@@ -1,17 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../utils/burger-api';
 import { TIngredient } from '@utils-types';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
-  loading: boolean;
-  error: string | null;
+  isLoading: boolean;
 };
 
 const initialState: TIngredientsState = {
   ingredients: [],
-  loading: false,
-  error: null
+  isLoading: false
 };
 
 export const getIngredients = createAsyncThunk(
@@ -24,27 +22,27 @@ export const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectIngredients: (state) => state.ingredients,
-    selectLoading: (state) => state.loading,
-    selectError: (state) => state.error
+    getAllIngredients: (state) => state.ingredients,
+    getIngredientsIsLoading: (state) => state.isLoading
   },
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.isLoading = true;
       })
       .addCase(getIngredients.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Unknown error';
+        state.isLoading = false;
       })
-      .addCase(getIngredients.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ingredients = action.payload;
-      });
+      .addCase(
+        getIngredients.fulfilled,
+        (state, action: PayloadAction<TIngredient[]>) => {
+          state.isLoading = false;
+          state.ingredients = action.payload;
+        }
+      );
   }
 });
 
-export const { selectIngredients, selectLoading, selectError } =
+export const { getAllIngredients, getIngredientsIsLoading } =
   ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;

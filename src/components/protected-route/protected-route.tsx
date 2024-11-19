@@ -1,10 +1,10 @@
-import { TUser } from '@utils-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import AppRoutes from '../../utils/constants';
 import { Preloader } from '@ui';
-import { useSelector } from 'react-redux';
-import { selectIsLoading, selectUser } from '../../services/user';
+import { useSelector } from '../../services/store';
+import { getUserData, getUserIsLoading } from '../../services/user';
+import App from '../app/app';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -12,22 +12,21 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
+  const isLoading = useSelector(getUserIsLoading);
+  const user = useSelector(getUserData);
   const location = useLocation();
-  const user = useSelector(selectUser);
-
-  const isInit = false;
-  const isLoading = useSelector(selectIsLoading);
 
   if (isLoading) {
     return <Preloader />;
   }
 
   if (!onlyUnAuth && !user) {
-    return <Navigate to={AppRoutes.LOGIN} />;
+    return <Navigate replace to={AppRoutes.LOGIN} state={{ from: location }} />;
   }
 
   if (onlyUnAuth && user) {
-    return <Navigate to={AppRoutes.PROFILE} />;
+    const from = location.state?.from || AppRoutes.ROOT;
+    return <Navigate replace to={from} />;
   }
 
   return children;
