@@ -12,7 +12,6 @@ export const ProfileMenu: FC = () => {
 
   const logout: () => void = useCallback(() => {
     dispatch(logoutUser());
-    //navigate(AppRoutes.LOGIN);
   }, [dispatch]);
 
   return <ProfileMenuUI handleLogout={logout} pathname={pathname} />;

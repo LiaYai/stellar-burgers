@@ -9,10 +9,9 @@ import {
   resetOrder,
   postOrder
 } from '../../services/burger';
-import { getUserData, getUserIsAuth } from '../../services/user';
+import { getUserData } from '../../services/user';
 import AppRoutes from '../../utils/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Modal } from '../modal';
 
 const flatIngredients = (ingredients: TBurger) =>
   (ingredients.bun
@@ -23,7 +22,6 @@ const flatIngredients = (ingredients: TBurger) =>
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const constructorItems = useSelector(getOrderIngredients);
   const orderRequest = useSelector(getOrderRequest);
   const orderModalData = useSelector(getOrderModalData);
@@ -33,16 +31,19 @@ export const BurgerConstructor: FC = () => {
     () => flatIngredients(constructorItems),
     [constructorItems]
   );
+
+  // Клик на кнопку заказа
   const onOrderClick = useCallback(() => {
-    if (!constructorItems.bun || orderRequest) return;
+    if (!constructorItems.bun) return alert('Выберите ингредиенты');
+    if (orderRequest)
+      return alert('Заказ уже отправлен, подождите, пожалуйста');
     if (!user) {
       return navigate(AppRoutes.LOGIN);
     }
-
     dispatch(postOrder(orderIngredients));
   }, [constructorItems, orderRequest, orderIngredients]);
 
-  const closeOrderModal = useCallback(() => dispatch(resetOrder()), []);
+  const closeOrderModal = useCallback(() => dispatch(resetOrder()), [dispatch]);
 
   const price = useMemo(
     () =>

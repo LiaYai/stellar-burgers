@@ -1,25 +1,30 @@
 import { FC, SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
-import { AppDispatch } from 'src/services/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../services/store';
+import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/user';
+import AppRoutes from '../../utils/constants';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch: AppDispatch = useDispatch();
+  const [error, setError] = useState<Error | null>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(registerUser({ email, password, name: userName }))
-      .unwrap()
-      .catch((error) => alert(`Ошибка регистрации: ${error.message}`));
+      .then(() => {
+        navigate(AppRoutes.ROOT, { replace: true });
+      })
+      .catch((error) => setError(error));
   };
 
   return (
     <RegisterUI
-      errorText=''
+      errorText={error?.message}
       email={email}
       userName={userName}
       password={password}

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
@@ -9,11 +9,13 @@ import { getOrderByNumber, getSelectedOrder } from '../../services/feeds';
 
 export const OrderInfo: FC = () => {
   const { id } = useParams();
-
   const dispatch = useDispatch();
-  useMemo(() => dispatch(getOrderByNumber(Number(id))), [id]);
-  const orderData = useSelector(getSelectedOrder);
 
+  useEffect(() => {
+    dispatch(getOrderByNumber(Number(id)));
+  }, [id]);
+
+  const orderData = useSelector(getSelectedOrder);
   const ingredients: TIngredient[] = useSelector(getAllIngredients);
 
   /* Готовим данные для отображения */

@@ -81,7 +81,7 @@ const App = () => {
           <Route
             path={AppRoutes.RESET_PASSWORD}
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onlyUnAuth>
                 <ResetPassword />
               </ProtectedRoute>
             }

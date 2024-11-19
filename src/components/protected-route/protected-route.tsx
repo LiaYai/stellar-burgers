@@ -12,13 +12,13 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
-  const isLoading = useSelector(getUserIsLoading);
+  //const isLoading = useSelector(getUserIsLoading);
   const user = useSelector(getUserData);
   const location = useLocation();
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+  // if (isLoading) {
+  //   return <Preloader />;
+  // }
 
   if (!onlyUnAuth && !user) {
     return <Navigate replace to={AppRoutes.LOGIN} state={{ from: location }} />;
