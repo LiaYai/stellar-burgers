@@ -21,10 +21,7 @@ const initialState: TFeedsState = {
   selectedOrder: null
 };
 
-export const getFeeds = createAsyncThunk(
-  'getFeed',
-  async () => await getFeedsApi()
-);
+export const getFeeds = createAsyncThunk('getFeed', getFeedsApi);
 
 export const getOrderByNumber = createAsyncThunk(
   'getOrderByNumber',

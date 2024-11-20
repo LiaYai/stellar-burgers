@@ -12,10 +12,7 @@ const initialState: TOrdersState = {
   isLoading: false
 };
 
-export const getOrders = createAsyncThunk(
-  'orders/getAll',
-  async () => await getOrdersApi()
-);
+export const getOrders = createAsyncThunk('orders/getAll', getOrdersApi);
 
 export const ordersSlice = createSlice({
   name: 'orders',
