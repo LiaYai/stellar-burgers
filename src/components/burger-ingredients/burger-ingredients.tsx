@@ -2,9 +2,9 @@ import { useState, useRef, useEffect, FC, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { TIngredient, TTabMode } from '@utils-types';
-import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { getAllIngredients } from '../../services/ingredients';
-import { useSelector } from '../../services/store';
+import { BurgerIngredientsUI } from '@ui';
+import { getAllIngredients } from '@slices';
+import { useSelector } from '@store';
 
 export const BurgerIngredients: FC = () => {
   const ingredients = useSelector(getAllIngredients);

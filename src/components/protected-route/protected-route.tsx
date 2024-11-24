@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import AppRoutes from '../../utils/constants';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router';
+import AppRoutes from '@constants';
 import { Preloader } from '@ui';
-import { useSelector } from '../../services/store';
-import { getUserData, getUserIsLoading } from '../../services/user';
-import App from '../app/app';
+import { useSelector } from '@store';
+import { getUserData } from '@slices';
 
-type ProtectedRouteProps = {
+export type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
   children: React.ReactNode;
 };

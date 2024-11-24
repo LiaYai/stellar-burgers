@@ -5,11 +5,12 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook
 } from 'react-redux';
-import ingredientsSlice from './ingredients';
-import feedsSlice from './feeds';
-import ordersSlice from './orders';
-import newOrderSlice from './burger';
-import userSlice from './user';
+
+import ingredientsSlice from '../services/slices/ingredients';
+import feedsSlice from '../services/slices/feeds';
+import newOrderSlice from '../services/slices/burger';
+import ordersSlice from '../services/slices/orders';
+import userSlice from '../services/slices/user';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
@@ -29,6 +30,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useDispatch: () => AppDispatch = () => dispatchHook();
-export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
+export const useSelector: TypedUseSelectorHook<RootState> =
+  selectorHook<RootState>;
 
 export default store;

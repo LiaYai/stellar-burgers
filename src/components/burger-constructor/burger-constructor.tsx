@@ -1,17 +1,17 @@
 import { FC, useCallback, useMemo } from 'react';
-import { TConstructorIngredient, TBurger } from '@utils-types';
+import { TConstructorIngredient, TBurger, TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useDispatch, useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '@store';
 import {
   getOrderIngredients,
   getOrderModalData,
   getOrderRequest,
   resetOrder,
-  postOrder
-} from '../../services/burger';
-import { getUserData } from '../../services/user';
-import AppRoutes from '../../utils/constants';
-import { useLocation, useNavigate } from 'react-router-dom';
+  postOrder,
+  getUserData
+} from '@slices';
+import AppRoutes from '@constants';
+import { useNavigate } from 'react-router-dom';
 
 const flatIngredients = (ingredients: TBurger) =>
   (ingredients.bun

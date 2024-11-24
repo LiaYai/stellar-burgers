@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '../utils/burger-api';
+import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
 type TIngredientsState = {
@@ -30,7 +30,7 @@ export const ingredientsSlice = createSlice({
       .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getIngredients.rejected, (state, action) => {
+      .addCase(getIngredients.rejected, (state) => {
         state.isLoading = false;
       })
       .addCase(

@@ -12,21 +12,13 @@ import {
 import '../../index.css';
 
 import { IngredientDetails, Modal, OrderInfo } from '@components';
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useParams
-} from 'react-router-dom';
-import { ProtectedRoute } from '../protected-route/protected-route';
-import { Layout } from '../layout/layout';
-import AppRoutes from '../../utils/constants';
-import { useDispatch } from '../../services/store';
-import { useCallback, useEffect, useMemo } from 'react';
-import { getIngredients } from '../../services/ingredients';
-import { clearSelectedOrder } from '../../services/feeds';
-import { getUserAuth } from '../../services/user';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { ProtectedRoute } from '../protected-route';
+import { Layout } from '../layout';
+import AppRoutes from '@constants';
+import { useDispatch } from '@store';
+import { useCallback, useEffect } from 'react';
+import { getIngredients, getUserAuth, clearSelectedOrder } from '@slices';
 
 const App = () => {
   const location = useLocation();

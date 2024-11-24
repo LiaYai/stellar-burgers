@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
-import AppRoutes from '../../utils/constants';
+import AppRoutes from '@constants';
 
 export const ResetPassword: FC = () => {
   const navigate = useNavigate();

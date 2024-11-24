@@ -1,11 +1,9 @@
 import { FC, useEffect, useMemo } from 'react';
-import { Preloader } from '../ui/preloader';
-import { OrderInfoUI } from '../ui/order-info';
+import { Preloader, OrderInfoUI } from '@ui';
 import { TIngredient } from '@utils-types';
-import { useDispatch, useSelector } from '../../services/store';
-import { getAllIngredients } from '../../services/ingredients';
+import { useDispatch, useSelector } from '@store';
 import { useParams } from 'react-router-dom';
-import { getOrderByNumber, getSelectedOrder } from '../../services/feeds';
+import { getOrderByNumber, getSelectedOrder, getAllIngredients } from '@slices';
 
 export const OrderInfo: FC = () => {
   const { id } = useParams();

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { AppHeader } from '../app-header/app-header';
+import { AppHeader } from '@components';
 import styles from './app.module.css';
 
 export const Layout = () => (

@@ -1,9 +1,9 @@
-import { FC, SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../../services/user';
-import AppRoutes from '../../utils/constants';
+import { registerUser } from '@slices';
+import AppRoutes from '@constants';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');

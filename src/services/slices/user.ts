@@ -4,14 +4,12 @@ import {
   getUserApi,
   registerUserApi,
   logoutApi,
-  forgotPasswordApi,
-  resetPasswordApi,
   updateUserApi,
   TLoginData,
   TRegisterData
 } from '@api';
 import { TUser } from '@utils-types';
-import { deleteCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, setCookie } from '@utils-cookie';
 
 type TUserState = {
   user: TUser | null;
