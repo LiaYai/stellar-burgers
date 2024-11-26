@@ -1,9 +1,12 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch } from '@store';
-import { loginUser } from '@slices';
-import AppRoutes from '@constants';
+import { getUserData, setUser } from '@slices';
 import { useNavigate } from 'react-router-dom';
+import { setCookie } from '@utils-cookie';
+import { useSelector } from 'react-redux';
+import { loginUserApi } from '@api';
+import AppRoutes from '@constants';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
@@ -11,11 +14,16 @@ export const Login: FC = () => {
   const [error, setError] = useState<Error | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(getUserData);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }))
-      .then(() => navigate(AppRoutes.ROOT, { replace: true }))
+    loginUserApi({ email, password })
+      .then((res) => {
+        dispatch(setUser(res.user));
+        setCookie('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+      })
       .catch((error) => setError(error));
   };
 

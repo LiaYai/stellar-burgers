@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const flatIngredients = (ingredients: TBurger) =>
   (ingredients.bun
-    ? [...ingredients.ingredients, ingredients.bun]
+    ? [...ingredients.ingredients, ingredients.bun, ingredients.bun]
     : ingredients.ingredients
   ).map((item) => item._id);
 
@@ -34,7 +34,8 @@ export const BurgerConstructor: FC = () => {
 
   // Клик на кнопку заказа
   const onOrderClick = useCallback(() => {
-    if (!constructorItems.bun) return alert('Выберите ингредиенты');
+    if (!constructorItems.bun || !constructorItems.ingredients.length)
+      return alert('Выберите ингредиенты');
     if (orderRequest)
       return alert('Заказ уже отправлен, подождите, пожалуйста');
     if (!user) {

@@ -1,9 +1,10 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
-import { useDispatch } from '../../services/store';
+import { rootReducer, useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '@slices';
-import AppRoutes from '@constants';
+import { setUser } from '@slices';
+import { registerUserApi } from '@api';
+import { setCookie } from '@utils-cookie';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
@@ -15,9 +16,11 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ email, password, name: userName }))
-      .then(() => {
-        navigate(AppRoutes.ROOT, { replace: true });
+    registerUserApi({ email, password, name: userName })
+      .then((res) => {
+        dispatch(setUser(res.user));
+        setCookie('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
       })
       .catch((error) => setError(error));
   };

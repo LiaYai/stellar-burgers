@@ -14,7 +14,7 @@ export const OrderInfo: FC = () => {
   }, [id]);
 
   const orderData = useSelector(getSelectedOrder);
-  const ingredients: TIngredient[] = useSelector(getAllIngredients);
+  const ingredients = useSelector(getAllIngredients);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

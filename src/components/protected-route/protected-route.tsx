@@ -11,7 +11,7 @@ export type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
-  //const isLoading = useSelector(getUserIsLoading);
+  // const isLoading = useSelector(getUserIsLoading);
   const user = useSelector(getUserData);
   const location = useLocation();
 

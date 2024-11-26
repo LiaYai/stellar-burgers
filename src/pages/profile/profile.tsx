@@ -1,8 +1,9 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from '@store';
-import { getUserData, updateUser } from '@slices';
+import { getUserData, setUser } from '@slices';
 import { TUser } from '@utils-types';
+import { updateUserApi } from '@api';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */
@@ -29,7 +30,11 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(updateUser(formValue));
+    updateUserApi(formValue)
+      .then((res) => {
+        dispatch(setUser(res.user));
+      })
+      .catch((error) => console.log(error));
     setFormValue({
       name: user.name,
       email: user.email,
