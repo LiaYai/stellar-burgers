@@ -10,9 +10,16 @@ import {
   ResetPassword
 } from '@pages';
 import '../../index.css';
+import styles from './app.module.css';
 
 import { IngredientDetails, Modal, OrderInfo } from '@components';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useMatch,
+  useNavigate
+} from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
 import { Layout } from '../layout';
 import AppRoutes from '@constants';
@@ -25,10 +32,12 @@ const App = () => {
   const background = location.state?.background;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const profileOrderId = useMatch(AppRoutes.ORDER_INFO)?.params.id;
+  const feedId = useMatch(AppRoutes.FEED_INFO)?.params.id;
+  const orderNumber = profileOrderId || feedId;
 
   useEffect(() => {
     dispatch(getIngredients());
-    dispatch(getUserAuth());
   }, [dispatch]);
 
   const clearSelected = useCallback(() => {
@@ -94,13 +103,44 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path={AppRoutes.INGREDIENTS} element={<IngredientDetails />} />
-          <Route path={AppRoutes.FEED_INFO} element={<OrderInfo />} />
+          <Route
+            path={AppRoutes.INGREDIENTS}
+            element={
+              <div className={styles.detailPageWrap}>
+                <h3
+                  className={`text text_type_main-large ${styles.detailHeader}`}
+                >
+                  Детали ингредиента
+                </h3>
+                <IngredientDetails />
+              </div>
+            }
+          />
+          <Route
+            path={AppRoutes.FEED_INFO}
+            element={
+              <div className={styles.detailPageWrap}>
+                <h3
+                  className={`text text_type_digits-default ${styles.detailHeader}`}
+                >
+                  {`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                </h3>
+                <OrderInfo />
+              </div>
+            }
+          />
           <Route
             path={AppRoutes.ORDER_INFO}
             element={
               <ProtectedRoute>
-                <OrderInfo />
+                <div className={styles.detailPageWrap}>
+                  <h3
+                    className={`text text_type_digits-default ${styles.detailHeader}`}
+                  >
+                    {`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                  </h3>
+                  <OrderInfo />
+                </div>
               </ProtectedRoute>
             }
           />
@@ -124,7 +164,7 @@ const App = () => {
             path={AppRoutes.FEED_INFO}
             element={
               <Modal
-                title={`#${location.pathname.split('/').slice(2)}`}
+                title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
                 onClose={closeModalOrder}
               >
                 <OrderInfo />
@@ -136,7 +176,7 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Modal
-                  title={`#${location.pathname.split('/').slice(3)}`}
+                  title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
                   onClose={closeModalOrder}
                 >
                   <OrderInfo />

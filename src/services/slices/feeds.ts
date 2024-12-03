@@ -4,7 +4,7 @@ import {
   getOrderByNumberApi,
   TFeedsResponse,
   TOrderResponse
-} from '@api';
+} from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
 type TFeedsState = {

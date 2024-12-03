@@ -21,7 +21,13 @@ export {
 
 export { getOrders, getUserOrders, getOrdersIsLoading } from './orders';
 
-export { getUserData, getUserIsLoading, getUserAuth, setUser } from './user';
+export {
+  getUserData,
+  getUserIsLoading,
+  getUserAuth,
+  setUser,
+  logoutUser
+} from './user';
 
 export {
   getIngredients,

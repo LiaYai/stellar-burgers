@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getUserApi } from '@api';
+import { getUserApi, logoutApi } from '../../utils/burger-api';
 import { TUser } from '@utils-types';
+import { deleteCookie, setCookie } from '../../utils/cookie';
 
 type TUserState = {
   user: TUser | null;
@@ -11,6 +12,12 @@ const initialState: TUserState = {
   user: null,
   isLoading: false
 };
+
+export const logoutUser = createAsyncThunk('user/logout', async () => {
+  await logoutApi();
+  localStorage.removeItem('refreshToken');
+  deleteCookie('accessToken');
+});
 
 export const getUserAuth = createAsyncThunk('user/getUser', async () => {
   const data = await getUserApi();
@@ -32,7 +39,6 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(getUserAuth.pending, (state) => {
         state.isLoading = true;
       })
@@ -41,6 +47,16 @@ export const userSlice = createSlice({
       })
       .addCase(getUserAuth.fulfilled, (state, action: PayloadAction<TUser>) => {
         state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
         state.isLoading = false;
       });
   }

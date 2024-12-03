@@ -39,3 +39,7 @@
   align-items: center;
   margin: 0 auto;
 }
+
+.icon:hover {
+  background-color: var(--text-primary-color);
+}

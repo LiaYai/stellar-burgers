@@ -82,12 +82,12 @@ module.exports = {
       '@utils-cookie': path.resolve(__dirname, './src/utils/cookie'),
       '@store': path.resolve(__dirname, './src/services/store'),
       '@constants': path.resolve(__dirname, './src/utils/constants')
-
     }
   },
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'bundle.js'
+    //pablicPath: '/'
   },
   devServer: {
     static: path.join(__dirname, './dist'),
