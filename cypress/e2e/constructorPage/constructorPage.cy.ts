@@ -6,7 +6,7 @@ describe('constructor page', function () {
     cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
       fixture: '../fixtures/ingredients.json'
     });
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
     cy.viewport(1920, 1080);
   });
 
