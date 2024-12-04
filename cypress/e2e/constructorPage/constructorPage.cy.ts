@@ -1,3 +1,5 @@
+import { head } from 'cypress/types/lodash';
+
 describe('constructor page', function () {
   beforeEach(() => {
     // Подменяем запрос на ингридиенты
@@ -75,18 +77,45 @@ describe('constructor page', function () {
 
   // Проверяем создание заказа
   describe('constructor order', () => {
-    it('should create a new order', () => {
+    this.beforeEach(() => {
       // Подменяем запрос пользователя
       cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
+        Authorization: '../fixtures/user.json',
         fixture: '../fixtures/user.json'
+      }).as('userAuth');
+
+      // Подменяем отправку заказа
+      cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
+        fixture: '../fixtures/order.json'
       });
+    });
+    it('should create a new order', () => {
+      // Создаем заказ
       cy.contains('li', 'Краторная булка').find('button').click();
       cy.contains('li', 'Соус фирменный').find('button').click();
       cy.contains('li', 'Биокотлета из марсианской Магнолии')
         .find('button')
         .click();
       cy.contains('button', 'Оформить заказ').click();
-      //cy.contains('h2', 'Ваш заказ:').should('exist');
+      // cy.wait('@userAuth')
+      //   .its('request.headers.Authorization')
+      //   .should('contain', 'accessToken');
+      cy.contains('button', 'Оформить заказ').click();
+
+      // Проверяем, что заказ создан - появляется номер заказа
+      cy.contains('p', 'Ваш заказ начали готовить').should('exist');
+      cy.contains('h2', '61466').should('exist');
+
+      // Закрывваем модалку
+      cy.get('[data-cy="close-modal"]').click();
+      cy.contains('h2', '61466').should('not.exist');
+
+      // Проверяем, что констуктор очистился
+      cy.contains('span', 'Краторная булка').should('not.exist');
+      cy.contains('span', 'Соус фирменный').should('not.exist');
+      cy.contains('span', 'Биокотлета из марсианской Магнолии').should(
+        'not.exist'
+      );
     });
   });
 });
