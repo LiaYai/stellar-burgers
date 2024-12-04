@@ -1,5 +1,6 @@
 describe('constructor page', function () {
   beforeEach(() => {
+    // Подменяем запрос на ингридиенты
     cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
       fixture: '../fixtures/ingredients.json'
     });
@@ -10,10 +11,11 @@ describe('constructor page', function () {
   // Проверка выбора ингридиентов
   describe('constructor burger', () => {
     it('should add the bun, staffing and sause by click', () => {
-      //Выбрали одну булку
+      // Выбрали одну булку.
+      // Почему-то data-cy для section для конструктора и для ингридиентов не всегда срабатывала, поэтому так:
       cy.contains('li', 'Краторная булка').find('button').click();
 
-      //Переключились на начинки, выбрали
+      // Переключились на начинки, выбрали
       cy.contains('div', 'Начинки').click();
       cy.contains('li', 'Говяжий метеорит').find('button').click();
       cy.contains('li', 'Биокотлета из марсианской Магнолии')
@@ -38,20 +40,6 @@ describe('constructor page', function () {
       cy.contains('span', 'Биокотлета из марсианской Магнолии').should('exist');
     });
   });
-
-  // describe('constructor order', () => {
-  //   it('should create a new order', () => {
-  //     cy.contains('li', 'Краторная булка').find('button').click();
-  //     cy.contains('li', 'Говяжий метеорит').find('button').click();
-  //     cy.contains('li', 'Соус фирменный').find('button').click();
-  //     cy.contains('li', 'Флюоресцентная булка').find('button').click();
-  //     cy.contains('li', 'Биокотлета из марсианской Магнолии')
-  //       .find('button')
-  //       .click();
-  //     cy.contains('button', 'Оформить заказ').click();
-  //     cy.contains('h2', 'Ваш заказ:').should('exist');
-  //   });
-  // });
 
   // Проверяем попап ингридиента
   describe('ingredients popup', () => {
@@ -82,6 +70,23 @@ describe('constructor page', function () {
       cy.contains('li', 'Филе Люминесцентного тетраодонтимформа').click();
       cy.get('body').click(0, 0);
       cy.contains('h3', 'Детали ингредиента').should('not.exist');
+    });
+  });
+
+  // Проверяем создание заказа
+  describe('constructor order', () => {
+    it('should create a new order', () => {
+      // Подменяем запрос пользователя
+      cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
+        fixture: '../fixtures/user.json'
+      });
+      cy.contains('li', 'Краторная булка').find('button').click();
+      cy.contains('li', 'Соус фирменный').find('button').click();
+      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+        .find('button')
+        .click();
+      cy.contains('button', 'Оформить заказ').click();
+      //cy.contains('h2', 'Ваш заказ:').should('exist');
     });
   });
 });
