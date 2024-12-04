@@ -1,4 +1,4 @@
-import { head } from 'cypress/types/lodash';
+import { ceil, head } from 'cypress/types/lodash';
 
 describe('constructor page', function () {
   beforeEach(() => {
@@ -80,7 +80,6 @@ describe('constructor page', function () {
     this.beforeEach(() => {
       // Подменяем запрос пользователя
       cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
-        Authorization: '../fixtures/user.json',
         fixture: '../fixtures/user.json'
       }).as('userAuth');
 
@@ -88,6 +87,13 @@ describe('constructor page', function () {
       cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
         fixture: '../fixtures/order.json'
       });
+
+      // Подставляем фейковые токены
+      cy.setCookie('accessToken', '../../fixtures/userToken.json');
+      window.localStorage.setItem(
+        'refreshToken',
+        '../../fixtures/refreshToken.json'
+      );
     });
     it('should create a new order', () => {
       // Создаем заказ
@@ -97,9 +103,6 @@ describe('constructor page', function () {
         .find('button')
         .click();
       cy.contains('button', 'Оформить заказ').click();
-      // cy.wait('@userAuth')
-      //   .its('request.headers.Authorization')
-      //   .should('contain', 'accessToken');
       cy.contains('button', 'Оформить заказ').click();
 
       // Проверяем, что заказ создан - появляется номер заказа
@@ -116,6 +119,12 @@ describe('constructor page', function () {
       cy.contains('span', 'Биокотлета из марсианской Магнолии').should(
         'not.exist'
       );
+    });
+
+    this.afterEach(() => {
+      // Удаляем фейковые токены
+      cy.clearCookie('accessToken');
+      window.localStorage.removeItem('refreshToken');
     });
   });
 });
