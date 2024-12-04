@@ -89,11 +89,8 @@ describe('constructor page', function () {
       });
 
       // Подставляем фейковые токены
-      cy.setCookie('accessToken', '../../fixtures/userToken.json');
-      window.localStorage.setItem(
-        'refreshToken',
-        '../../fixtures/refreshToken.json'
-      );
+      cy.setCookie('accessToken', 'someAccessToken');
+      window.localStorage.setItem('refreshToken', 'someRefreshToken');
     });
     it('should create a new order', () => {
       // Создаем заказ

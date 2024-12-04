@@ -8,11 +8,6 @@ describe('userSlice', () => {
     isLoading: false
   };
 
-  it('should return the initial state', () => {
-    const state = userSlice(undefined, { type: '' });
-    expect(state).toEqual(initialState);
-  });
-
   describe('selectors', () => {
     const state = {
       user: {

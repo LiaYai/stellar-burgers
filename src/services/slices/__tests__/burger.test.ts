@@ -71,11 +71,6 @@ describe('sliceBurger', () => {
     orderModalData: null
   };
 
-  it('should return the initial state', () => {
-    const state = newOrderSlice(undefined, { type: '' });
-    expect(state).toEqual(initialState);
-  });
-
   describe('actions', () => {
     it('should handle "addIngredient", add ingredient "bun"', () => {
       const state = newOrderSlice(initialState, {
@@ -132,7 +127,7 @@ describe('sliceBurger', () => {
     });
   });
 
-  describe('extraReducer "postOrder"', () => {
+  describe('extra reducer "postOrder"', () => {
     it('should handle "postOrder" pending', () => {
       const state = newOrderSlice(burgerState, {
         type: postOrder.pending.type

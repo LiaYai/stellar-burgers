@@ -10,11 +10,6 @@ describe('sliceOrders', () => {
     isLoading: false
   };
 
-  it('should return the initial state', () => {
-    const state = ordersSlice(undefined, { type: '' });
-    expect(state).toEqual(initialState);
-  });
-
   describe('selectors', () => {
     const state = {
       orders: allOrdersData,

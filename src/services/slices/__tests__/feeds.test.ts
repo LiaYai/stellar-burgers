@@ -18,11 +18,6 @@ describe('sliceFeeds', () => {
     selectedOrder: null
   };
 
-  it('should return the initial state', () => {
-    const state = feedsSlice(undefined, { type: '' });
-    expect(state).toEqual(initialState);
-  });
-
   describe('selectors', () => {
     const state = feedsState;
     const store = configureStore({

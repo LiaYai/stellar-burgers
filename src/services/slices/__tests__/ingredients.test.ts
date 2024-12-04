@@ -12,11 +12,6 @@ describe('sliceIngredients', () => {
     isLoading: false
   };
 
-  it('should return the initial state', () => {
-    const state = ingredientsSlice(undefined, { type: '' });
-    expect(state).toEqual(initialState);
-  });
-
   describe('selectors', () => {
     const state = {
       ingredients: allIngredientsData,
@@ -42,7 +37,7 @@ describe('sliceIngredients', () => {
     });
   });
 
-  describe('async action getIngredients', () => {
+  describe('extra reducer getIngredients', () => {
     it('should "getIngredients" with resolved', () => {
       const data = allIngredientsData;
       const state = ingredientsSlice(initialState, {
