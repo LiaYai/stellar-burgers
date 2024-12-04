@@ -7,6 +7,7 @@ describe('constructor page', function () {
     cy.viewport(1920, 1080);
   });
 
+  // Проверка выбора ингридиентов
   describe('constructor burger', () => {
     it('should add the bun, staffing and sause by click', () => {
       //Выбрали одну булку
@@ -35,6 +36,52 @@ describe('constructor page', function () {
       cy.contains('span', 'Говяжий метеорит').should('exist');
       cy.contains('span', 'Соус фирменный').should('exist');
       cy.contains('span', 'Биокотлета из марсианской Магнолии').should('exist');
+    });
+  });
+
+  // describe('constructor order', () => {
+  //   it('should create a new order', () => {
+  //     cy.contains('li', 'Краторная булка').find('button').click();
+  //     cy.contains('li', 'Говяжий метеорит').find('button').click();
+  //     cy.contains('li', 'Соус фирменный').find('button').click();
+  //     cy.contains('li', 'Флюоресцентная булка').find('button').click();
+  //     cy.contains('li', 'Биокотлета из марсианской Магнолии')
+  //       .find('button')
+  //       .click();
+  //     cy.contains('button', 'Оформить заказ').click();
+  //     cy.contains('h2', 'Ваш заказ:').should('exist');
+  //   });
+  // });
+
+  // Проверяем попап ингридиента
+  describe('ingredients popup', () => {
+    it('should open ingredients popup', () => {
+      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа').click();
+
+      // Должен быть заголовок, данные этого ингридиента и кнопка закрытия
+      cy.contains('h3', 'Детали ингредиента').should('exist');
+      cy.get("[data-cy='close-modal'").should('exist');
+      cy.contains('div', 'Филе Люминесцентного тетраодонтимформа').should(
+        'exist'
+      );
+    });
+
+    it('should close ingredients popup by click', () => {
+      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа').click();
+      cy.get('[data-cy="close-modal"]').click();
+      cy.contains('h3', 'Детали ингредиента').should('not.exist');
+    });
+
+    it('should close ingredients popup by escape', () => {
+      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа').click();
+      cy.get('body').type('{esc}');
+      cy.contains('h3', 'Детали ингредиента').should('not.exist');
+    });
+
+    it('should close ingredients popup by click outside', () => {
+      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа').click();
+      cy.get('body').click(0, 0);
+      cy.contains('h3', 'Детали ингредиента').should('not.exist');
     });
   });
 });
