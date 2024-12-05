@@ -1,0 +1,6 @@
+{
+  "accessToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2QwOTA3YjI3YjA2MDAxYzNlOTNmMyIsImlhdCI6MTczMzM0OTg0MywiZXhwIjoxNzMzMzUxMDQzfQ.Pn9TfNT0hJvvg8Ym2uN1AmkpMXBJ_lw6pNfdWkPrauQ",
+  "refreshToken": "8f41d46cbf09183069d70888314b5cbbeb98454e53a3746b452549b6ffd636f94604bb0049d4d65a",
+  "success": "true",
+  "user": { "email": "liayai@ya.ru", "name": "Alyssa Vine" }
+}

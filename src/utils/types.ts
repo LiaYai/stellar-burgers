@@ -43,3 +43,8 @@ export type TBurger = {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };
+
+export type TMoveInfo = {
+  from: number;
+  to: number;
+};

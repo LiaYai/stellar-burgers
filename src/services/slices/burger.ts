@@ -2,9 +2,10 @@ import {
   TConstructorIngredient,
   TIngredient,
   TOrder,
-  TBurger
+  TBurger,
+  TMoveInfo
 } from '@utils-types';
-import { orderBurgerApi } from '@api';
+import { orderBurgerApi } from '../../utils/burger-api';
 import {
   createAsyncThunk,
   createSlice,
@@ -47,10 +48,7 @@ export const newOrderSlice = createSlice({
         return { payload: { ...data, id } };
       }
     },
-    moveIngredient: (
-      state,
-      action: PayloadAction<{ from: number; to: number }>
-    ) => {
+    moveIngredient: (state, action: PayloadAction<TMoveInfo>) => {
       const { from, to } = action.payload;
       state.burgerIngredients.ingredients.splice(
         to,
